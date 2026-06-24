@@ -1,42 +1,35 @@
 #!/usr/bin/env bash
 set -o errexit
-set -o pipefail
 
-echo "📦 Setting up Java + Python for Render..."
+echo "📦 Setting up Java + Python..."
 
-# ==================== JAVA SETUP ====================
-echo "→ Installing Java 17..."
+# Java download
 mkdir -p java
 cd java
-
-# Download and extract Java
-wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz -O jdk.tar.gz
-
-tar -xzf jdk.tar.gz
-rm jdk.tar.gz  # cleanup
-
+wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
+tar -xzf OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
 export JAVA_HOME=$(pwd)/jdk-17.0.12+7
 export PATH=$JAVA_HOME/bin:$PATH
-
 cd ..
 
 echo "✅ Java installed:"
 java -version
 
-# ==================== ANDROID TOOLS ====================
-echo "→ Setting up Android tools..."
-if [ -d "tools" ]; then
-    echo "✅ tools/ directory found:"
-    ls -la tools/
-    chmod +x tools/aapt2 2>/dev/null || true
-    echo "✅ aapt2 made executable"
-else
-    echo "⚠️  tools/ directory not found!"
-fi
+# Tools
+echo "📥 Downloading Linux aapt2..."
+mkdir -p tools
+cd tools
+wget -q -O aapt2.zip https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/7.1.0-7984345/aapt2-7.1.0-7984345-linux.zip
+unzip -q aapt2.zip
+chmod +x aapt2
+rm aapt2.zip
+cd ..
 
-# ==================== PYTHON DEPENDENCIES ====================
-echo "→ Installing Python dependencies..."
-pip install --upgrade pip
-pip install -r requirements.txt --no-cache-dir
+echo "✅ Tools ready:"
+ls -la tools/
 
-echo "✅ Build completed successfully!"
+# Python dependencies
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
+
+echo "✅ Build completed!"
