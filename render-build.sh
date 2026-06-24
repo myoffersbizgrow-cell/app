@@ -15,22 +15,27 @@ cd ..
 echo "✅ Java installed:"
 java -version
 
-# ✅ Download Android tools
+# ✅ Download Android tools with error checking
+echo "🔧 Downloading Android tools..."
 mkdir -p tools
 cd tools
 
 # APKTool
-wget -q -O apktool.jar https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/windows/apktool.bat
+echo "  📥 Downloading apktool.jar..."
+wget -q --show-progress -O apktool.jar https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/windows/apktool.bat || { echo "❌ Failed"; exit 1; }
 
 # Bundletool
-wget -q -O bundletool.jar https://github.com/google/bundletool/releases/download/1.16.1/bundletool-all-1.16.1.jar
+echo "  📥 Downloading bundletool.jar..."
+wget -q --show-progress -O bundletool.jar https://github.com/google/bundletool/releases/download/1.16.1/bundletool-all-1.16.1.jar || { echo "❌ Failed"; exit 1; }
 
 # Android.jar
-wget -q -O android.jar https://github.com/airwire/android-platforms/raw/main/android-33.jar
+echo "  📥 Downloading android.jar..."
+wget -q --show-progress -O android.jar https://github.com/airwire/android-platforms/raw/main/android-33.jar || { echo "❌ Failed"; exit 1; }
 
 # AAPT2
-wget -q -O aapt2.zip https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/7.1.0-7984345/aapt2-7.1.0-7984345-linux.zip
-unzip -q aapt2.zip
+echo "  📥 Downloading aapt2..."
+wget -q --show-progress -O aapt2.zip https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/7.1.0-7984345/aapt2-7.1.0-7984345-linux.zip || { echo "❌ Failed"; exit 1; }
+unzip -q aapt2.zip || { echo "❌ Unzip failed"; exit 1; }
 chmod +x aapt2
 rm aapt2.zip
 
@@ -40,6 +45,7 @@ echo "✅ Tools downloaded:"
 ls -la tools/
 
 # ✅ Install Python dependencies
+echo "📦 Installing Python dependencies..."
 pip3 install --upgrade pip
 pip3 install -r requirements.txt
 
