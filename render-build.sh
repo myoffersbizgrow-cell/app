@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -o errexit
 
-echo "📦 Setting up Java + Python..."
+echo "📦 Setting up Java..."
 
-# ✅ Download and install Java
+# Download and install Java
 mkdir -p java
 cd java
 wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
@@ -15,36 +15,20 @@ cd ..
 echo "✅ Java installed:"
 java -version
 
-# ✅ Download Android tools with error checking
-echo "🔧 Downloading Android tools..."
+# ✅ Download Linux aapt2
+echo "📥 Downloading Linux aapt2..."
 mkdir -p tools
 cd tools
-
-# APKTool
-echo "  📥 Downloading apktool.jar..."
-wget -q --show-progress -O apktool.jar https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/windows/apktool.bat || { echo "❌ Failed"; exit 1; }
-
-# Bundletool
-echo "  📥 Downloading bundletool.jar..."
-wget -q --show-progress -O bundletool.jar https://github.com/google/bundletool/releases/download/1.16.1/bundletool-all-1.16.1.jar || { echo "❌ Failed"; exit 1; }
-
-# Android.jar
-echo "  📥 Downloading android.jar..."
-wget -q --show-progress -O android.jar https://github.com/airwire/android-platforms/raw/main/android-33.jar || { echo "❌ Failed"; exit 1; }
-
-# AAPT2
-echo "  📥 Downloading aapt2..."
-wget -q --show-progress -O aapt2.zip https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/7.1.0-7984345/aapt2-7.1.0-7984345-linux.zip || { echo "❌ Failed"; exit 1; }
-unzip -q aapt2.zip || { echo "❌ Unzip failed"; exit 1; }
+wget -q -O aapt2.zip https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/7.1.0-7984345/aapt2-7.1.0-7984345-linux.zip
+unzip -q aapt2.zip
 chmod +x aapt2
 rm aapt2.zip
-
 cd ..
 
-echo "✅ Tools downloaded:"
+echo "✅ Tools ready:"
 ls -la tools/
 
-# ✅ Install Python dependencies
+# Install Python dependencies
 echo "📦 Installing Python dependencies..."
 pip3 install --upgrade pip
 pip3 install -r requirements.txt
