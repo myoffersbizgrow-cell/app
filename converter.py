@@ -1,9 +1,3 @@
-cd /c/Users/thecy/Desktop/App
-
-# Delete the old file
-rm converter.py
-
-# Create a fresh clean file
 cat > converter.py << 'EOF'
 import os
 import subprocess
