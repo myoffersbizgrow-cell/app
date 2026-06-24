@@ -1,4 +1,3 @@
-cat > converter.py << 'EOF'
 import os
 import subprocess
 import sys
@@ -199,4 +198,3 @@ class APKtoAABConverter:
             if job_dir.exists():
                 shutil.rmtree(job_dir)
             raise e
-EOF
