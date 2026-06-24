@@ -1,30 +1,42 @@
 #!/usr/bin/env bash
 set -o errexit
+set -o pipefail
 
-echo "📦 Setting up Java + Python..."
+echo "📦 Setting up Java + Python for Render..."
 
-# ✅ Java download karo (writable directory)
+# ==================== JAVA SETUP ====================
+echo "→ Installing Java 17..."
 mkdir -p java
 cd java
-wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
-tar -xzf OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
+
+# Download and extract Java
+wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz -O jdk.tar.gz
+
+tar -xzf jdk.tar.gz
+rm jdk.tar.gz  # cleanup
+
 export JAVA_HOME=$(pwd)/jdk-17.0.12+7
 export PATH=$JAVA_HOME/bin:$PATH
+
 cd ..
 
 echo "✅ Java installed:"
 java -version
 
-# ✅ Android tools (already in repo)
-echo "✅ Tools already present:"
-ls -la tools/
+# ==================== ANDROID TOOLS ====================
+echo "→ Setting up Android tools..."
+if [ -d "tools" ]; then
+    echo "✅ tools/ directory found:"
+    ls -la tools/
+    chmod +x tools/aapt2 2>/dev/null || true
+    echo "✅ aapt2 made executable"
+else
+    echo "⚠️  tools/ directory not found!"
+fi
 
-# ✅ Make aapt2 executable
-chmod +x tools/aapt2 2>/dev/null || true
+# ==================== PYTHON DEPENDENCIES ====================
+echo "→ Installing Python dependencies..."
+pip install --upgrade pip
+pip install -r requirements.txt --no-cache-dir
 
-# ✅ Python dependencies
-echo "📦 Installing Python dependencies..."
-pip3 install --upgrade pip
-pip3 install -r requirements.txt
-
-echo "✅ Build completed!"
+echo "✅ Build completed successfully!"
